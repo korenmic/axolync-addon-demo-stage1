@@ -8,7 +8,7 @@ export default defineAddon({
   addonId: 'demo-stage1-addon',
   name: 'Demo Stage 1 Addon',
   version: '1.0.0-demo',
-  contractsVersion: '1.1.0',
+  contractsVersion: '2.0.0',
   description: 'Packaged Stage 1 addon that proves one ZIP can host SongSense, SyncEngine, LyricFlow, and SongMetadata adapters.',
   requirements: [],
   adapters: [
