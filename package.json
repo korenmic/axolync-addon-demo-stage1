@@ -1,0 +1,18 @@
+{
+  "name": "axolync-addon-demo-stage1",
+  "version": "1.0.0-demo",
+  "private": true,
+  "type": "module",
+  "description": "Deterministic Stage 1 demo addon package for Axolync.",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "fflate": "^0.8.2"
+  },
+  "scripts": {
+    "package": "node scripts/build-addon-package.mjs",
+    "test": "node --test tests/*.node.test.mjs"
+  }
+}
+
