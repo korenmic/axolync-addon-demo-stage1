@@ -2,13 +2,12 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { startMockPluginApiServer } from '../../axolync-browser/demo/openapi/mock-plugin-api.mjs';
-
 import {
   assertVisibleLyrics,
   createCapacitorBrowser,
   installBrowserDemoPlugins,
   resolveBrowserPath,
+  startBrowserMockPluginApiServer,
   waitForReady,
 } from './capacitor-browser-host-common.mjs';
 
@@ -129,7 +128,7 @@ try {
     throw new Error('dist/index.html is missing in axolync-browser. Run `npm run build` there before the packaged capacitor regression test.');
   }
 
-  mockApi = await startMockPluginApiServer();
+  mockApi = await startBrowserMockPluginApiServer();
   const mockUrl = `${mockApi.baseUrl}/`;
   server = await startBundleServer({
     host: '127.0.0.1',

@@ -1,22 +1,19 @@
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { chromium } from 'playwright';
-
-import {
-  DEMO_URL as BROWSER_DEMO_URL,
-  installDemoPlugins as browserInstallDemoPlugins,
-  startDevServer as browserStartDevServer,
-  stopDevServer as browserStopDevServer,
-} from '../../axolync-browser/demo/runner/common.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export const DEMO_STAGE1_REPO_ROOT = path.resolve(__dirname, '..');
-export const BROWSER_ROOT = path.resolve(DEMO_STAGE1_REPO_ROOT, '..', 'axolync-browser');
-export const DEMO_URL = process.env.DEMO_URL || BROWSER_DEMO_URL;
+export const BROWSER_ROOT = path.resolve(process.env.AXOLYNC_BROWSER_ROOT || path.join(DEMO_STAGE1_REPO_ROOT, '..', 'axolync-browser'));
+export const DEMO_URL = process.env.DEMO_URL || 'http://127.0.0.1:4173';
 
 export function resolveBrowserPath(...segments) {
   return path.resolve(BROWSER_ROOT, ...segments);
+}
+
+async function importFromBrowserRepo(...segments) {
+  return import(pathToFileURL(resolveBrowserPath(...segments)).href);
 }
 
 async function withBrowserCwd(action) {
@@ -30,15 +27,23 @@ async function withBrowserCwd(action) {
 }
 
 export async function startBrowserDevServer() {
-  return withBrowserCwd(() => browserStartDevServer());
+  const { startDevServer } = await importFromBrowserRepo('demo', 'runner', 'common.mjs');
+  return withBrowserCwd(() => startDevServer());
 }
 
 export async function stopBrowserDevServer(child) {
-  return browserStopDevServer(child);
+  const { stopDevServer } = await importFromBrowserRepo('demo', 'runner', 'common.mjs');
+  return stopDevServer(child);
 }
 
 export async function installBrowserDemoPlugins(page) {
-  return withBrowserCwd(() => browserInstallDemoPlugins(page));
+  const { installDemoPlugins } = await importFromBrowserRepo('demo', 'runner', 'common.mjs');
+  return withBrowserCwd(() => installDemoPlugins(page));
+}
+
+export async function startBrowserMockPluginApiServer() {
+  const { startMockPluginApiServer } = await importFromBrowserRepo('demo', 'openapi', 'mock-plugin-api.mjs');
+  return startMockPluginApiServer();
 }
 
 export function createCapacitorBrowser() {
