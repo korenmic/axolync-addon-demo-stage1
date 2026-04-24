@@ -9,6 +9,15 @@ export default defineAdapter({
   supportedPlatforms: ['web', 'android', 'desktop', 'ios'],
   requiredPermissions: [],
   requiredHostCapabilities: [],
+  settings: [
+    {
+      settingId: 'return_untimed_lyrics',
+      label: 'Return Untimed Lyrics',
+      kind: 'boolean',
+      description: 'Return plain lyrics without timing so browser paragraph synthetic timing can be tested.',
+      defaultValue: false,
+    },
+  ],
   implementation: LyricFlowDemoAdapter,
   sourceFileUrl: new URL('./index.js', import.meta.url),
   bundlePath: 'adapters/LyricFlowDemoAdapter/index.js',

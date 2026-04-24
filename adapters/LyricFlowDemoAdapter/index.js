@@ -129,6 +129,17 @@ function cloneLyricUnits(units) {
   return units.map((unit) => ({ ...unit }));
 }
 
+function normalizeBoolean(value) {
+  return value === true;
+}
+
+function buildPlainLyricsText(units) {
+  return units
+    .map((unit) => String(unit?.text ?? '').replace(/\n+$/g, '').trim())
+    .filter(Boolean)
+    .join('\n\n');
+}
+
 function getLyricCoverageEndMs(units) {
   return units.reduce((maxEndMs, unit) => {
     const inSongMs = Number(unit?.inSongMs);
@@ -264,6 +275,20 @@ export class LyricFlowDemoAdapter {
     );
     const granularity = normalizeGranularity(input.granularity ?? input.settings?.granularity);
     const units = SONGS[songId]?.[granularity] ?? SONGS[HOUSE_OF_THE_RISING_SUN_ID].line;
+    if (normalizeBoolean(input.settings?.return_untimed_lyrics)) {
+      return {
+        granularity: 'paragraph',
+        units: [],
+        providerReason: 'lyrics_plain_only',
+        providerDiagnostics: {
+          plainOnlyDiscovery: {
+            source: 'demo-stage1-addon',
+            adapterId: 'LyricFlowDemoAdapter',
+            plainLyricsText: buildPlainLyricsText(SONGS[songId]?.line ?? SONGS[HOUSE_OF_THE_RISING_SUN_ID].line),
+          },
+        },
+      };
+    }
     return {
       granularity,
       units: cloneLyricUnits(units),
