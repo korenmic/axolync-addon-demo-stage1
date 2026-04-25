@@ -19,7 +19,6 @@ async function runPureDemoScenario(page) {
       lyricflow: 'demo-lyricflow',
     }));
   });
-  await page.reload({ waitUntil: 'networkidle' });
   await page.click('#start-btn');
   await waitForReady(page);
   const snapshot = await assertVisibleLyrics(page, 'pure-demo-capacitor');
@@ -37,15 +36,14 @@ async function runMixedAddonScenario(page) {
       lyricflow: 'demo-stage1-addon',
     }));
   });
-  await page.reload({ waitUntil: 'networkidle' });
   await page.click('#start-btn');
   await waitForReady(page);
   const snapshot = await assertVisibleLyrics(page, 'mixed-demo-addon-capacitor');
   const activePlugins = JSON.parse(snapshot.activePlugins || '{}');
-  if (activePlugins.syncengine !== 'demo-syncengine' || activePlugins.lyricflow !== 'demo-lyricflow') {
-    throw new Error(`mixed-demo-addon-capacitor: expected deterministic demo fallback ${JSON.stringify(activePlugins)}`);
+  if (activePlugins.syncengine !== 'demo-stage1-addon' || activePlugins.lyricflow !== 'demo-stage1-addon') {
+    throw new Error(`mixed-demo-addon-capacitor: expected stage1 demo addon selections ${JSON.stringify(activePlugins)}`);
   }
-  console.log(`[demo:test] mixed-demo-addon-capacitor-fallback | state=${snapshot.state} lyricUnits=${snapshot.lyricUnitCount}`);
+  console.log(`[demo:test] mixed-demo-addon-capacitor | state=${snapshot.state} lyricUnits=${snapshot.lyricUnitCount}`);
 }
 
 async function runScenario(scenario) {
