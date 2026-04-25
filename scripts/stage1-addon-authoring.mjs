@@ -3,6 +3,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { zipSync, strToU8 } from 'fflate';
 
+const ZIP_MTIME = new Date('1980-01-01T00:00:00Z');
+
 function ensureFunction(value, label) {
   if (typeof value !== 'function') {
     throw new TypeError(`${label} must be a function or class reference.`);
@@ -138,7 +140,7 @@ export function buildStage1AddonZipBuffer(addon) {
   }
   return {
     manifest,
-    zipBuffer: Buffer.from(zipSync(archive)),
+    zipBuffer: Buffer.from(zipSync(archive, { mtime: ZIP_MTIME })),
     files,
   };
 }
