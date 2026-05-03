@@ -28,6 +28,12 @@ bootstrap = ["README.md"]
 command = "npm run package"
 outputs = ["artifacts/output/local_js/demo-stage1-addon-local_js.zip"]
 
+[[exports.generated_outputs]]
+name = "local-js-addon-package"
+kind = "package-zip"
+path = "artifacts/output/local_js/demo-stage1-addon-local_js.zip"
+format = "zip"
+
 [[exports.inventories]]
 name = "adapter-catalog"
 path = "report/addon-manifest.demo-stage1-addon.json"
