@@ -1,0 +1,40 @@
+schema = "axolync.repo/v1"
+
+[repo]
+id = "demo-stage1-addon"
+roles = ["consumable"]
+display_name = "Demo Stage 1 Addon"
+description = "Stage 1 demo addon with one demo adapter per current controller lane."
+
+[source]
+git_url = "https://github.com/korenmic/axolync-addon-demo-stage1.git"
+default_ref = "master"
+local_dev_path_hint = "../axolync-addon-demo-stage1"
+
+[bootstrap]
+install_mode = "managed-clone"
+install_root = ".axolync/repos"
+readme = "README.md"
+agent_docs = ["README.md"]
+
+[exports.tests]
+full = "npm test"
+smoke = "npm test"
+
+[exports.docs]
+bootstrap = ["README.md"]
+
+[exports.packaging]
+command = "npm run package"
+outputs = ["artifacts/output/local_js/demo-stage1-addon-local_js.zip"]
+
+[[exports.inventories]]
+name = "adapter-catalog"
+path = "report/addon-manifest.demo-stage1-addon.json"
+format = "json"
+
+[[consumes.repos]]
+id = "axolync-contract"
+use = "schema-and-runtime-contracts"
+required = true
+source = "managed"
