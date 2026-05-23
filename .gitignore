@@ -3,4 +3,4 @@ artifacts/output/**
 report/*.json
 *.log
 .DS_Store
-
+*~
